@@ -37,7 +37,7 @@ $result = $pdo->query($sql);
             echo "<tr>";
             echo '<td>'.$row['id'].'</td>';
             echo '<td>'.$row['name'].'</td>';
-            echo '<td><a href="">Редактировать</a></td>';
+            echo '<td><a href="update.php?id='.$row['id'].'">Редактировать</a></td>';
             echo '<td><a href="delete.php?id='.$row['id'].'">Удалить</a></td>';
             echo "</tr>";
 
