@@ -7,7 +7,7 @@ require_once 'navbar.php';
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <title>Блог</title>
+    <title>Корзина</title>
     <style>
         .login {
             width: 620px;
@@ -19,29 +19,36 @@ require_once 'navbar.php';
 <section class="container">
     <div class="login">
         <h1>Корзина</h1>
-        <?php
-        echo '<pre>';
-        $cart_json = $_COOKIE['cart'];
-        $cart = json_decode($_COOKIE['cart'],true);
-        foreach ($cart as $id => $count){
-            $pdo->query('SELECT *  FROM `product` WHERE id='.$id)
-        }
+        <table class = "table table-borderless">
+            <thead class="text-center">
+            <tr>
+                <th>Название</th>
+                <th>Фото</th>
+                <th>Описание</th>
+                <th>Количество</th>
+                <th>Удалить</th>
+            </tr>
+            <?php
+            require_once 'caart.php';
+            $cart = new Cart();
+            foreach ($cart->cart as $id => $count){
+                $stmt = $pdo->query('SELECT *  FROM `product` WHERE id='.$id);
 
+                while ($row = $stmt->fetch())
+                {
+                    echo "<tr>";
+                    echo '<td><a>'.$row['name'].'</a></td>';
+                    echo '<td><img src="images/'.$row['photo'].'" alt="Здесь должна быть картинка" width="150" height="150"></td>';
+                    echo '<td>'.$row['text'].'</td>';
+                    echo '<td><a href="cart_rem.php?id='.$row['id'].'"> - </a><a>'.$count.'</a><a href="cart_add.php?id='.$row['id'].'"> + </a></td>';
+                    echo '<td><a href="cart_del.php?id='.$row['id'].'"><button type="button" class="btn btn-secondary">Удалить</button></a></td>';
+                    echo "</tr>";
 
-
-        $stmt = $pdo->query('SELECT *  FROM `product`');
-        echo "<table><tr><th>№</th><th>Название</th><th>Описание</th><th>Фото</th></tr>";
-        while ($row = $stmt->fetch())
-        {
-            echo "<tr>";
-            echo '<td>'.$row['idR'].'</td>';
-            echo '<td><a href="comments.php?id='.$row['id'].'">'.$row['name'].'</a></td>';
-            echo '<td>'.$row['text'].'</td>';
-            echo '<td><img src="images/'.$row['photo'].'" alt="Здесь должна быть картинка" width="150" height="150"></td>';
-            echo "</tr>";
-
-        }
-        ?>
+                }
+            }
+            ?>
+        </table>
+        <?php ?>
         </table>
         <br>
     </div>
